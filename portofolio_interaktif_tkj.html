@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Andika - Portofolio Teknik Komputer & Jaringan (TKJ)</title>
+    
+    <!-- Google Fonts: JetBrains Mono & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Tailwind Config & Custom Colors -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        primary: 'var(--color-primary)',
+                        'primary-hover': 'var(--color-primary-hover)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --color-primary: #06b6d4; /* Default Cyan Neon for Cyber TKJ Vibe */
+            --color-primary-hover: #0891b2;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .light .glass {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 4px;
+        }
+
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--color-primary), #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Typing Cursor Animation */
+        .typing-cursor::after {
+            content: '_';
+            animation: blink 0.8s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Tech Grid Pattern Background */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen relative flex flex-col justify-between overflow-x-hidden bg-grid-pattern">
+
+    <!-- FLOATING CUSTOMIZER BUTTON -->
+    <button id="open-customizer" class="fixed bottom-6 right-6 z-50 bg-primary text-slate-950 font-bold p-4 rounded-full shadow-2xl hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center group" title="Kustomisasi Portofolio TKJ">
+        <i class="fa-solid fa-sliders text-xl group-hover:rotate-90 transition-transform duration-300"></i>
+    </button>
+
+    <!-- SIDEBAR CUSTOMIZER PANEL -->
+    <div id="customizer-panel" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-slate-900 shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto border-l border-slate-800">
+        <div class="p-5 border-b border-slate-800 flex justify-between items-center sticky top-0 bg-slate-900/90 backdrop-blur z-10">
+            <h3 class="font-bold text-lg flex items-center gap-2"><i class="fa-solid fa-terminal text-primary"></i> TKJ Live Customizer</h3>
+            <button id="close-customizer" class="text-slate-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="p-5 space-y-6">
+            <!-- Tampilan Mode -->
+            <div>
+                <label class="block text-sm font-medium mb-2 text-slate-300">Tema Mode</label>
+                <div class="grid grid-cols-2 gap-2">
+                    <button id="btn-theme-dark" onclick="setTheme('dark')" class="px-4 py-2 text-sm rounded-lg border border-slate-700 flex items-center justify-center gap-2 hover:border-primary transition">
+                        <i class="fa-solid fa-moon text-cyan-400"></i> Cyber Dark
+                    </button>
+                    <button id="btn-theme-light" onclick="setTheme('light')" class="px-4 py-2 text-sm rounded-lg border border-slate-700 flex items-center justify-center gap-2 hover:border-primary transition">
+                        <i class="fa-solid fa-sun text-amber-400"></i> Light Mode
+                    </button>
+                </div>
+            </div>
+
+            <!-- Warna Utama -->
+            <div>
+                <label class="block text-sm font-medium mb-2 text-slate-300">Warna Aksen Neon</label>
+                <div class="flex items-center gap-3">
+                    <input type="color" id="input-primary-color" class="w-10 h-10 rounded cursor-pointer border-0 bg-transparent" value="#06b6d4" onchange="updatePrimaryColor(this.value)">
+                    <span id="color-hex-code" class="text-sm font-mono uppercase text-slate-400">#06B6D4</span>
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- Informasi Pribadi -->
+            <div class="space-y-4">
+                <h4 class="font-semibold text-sm text-primary uppercase tracking-wider font-mono">&gt; Profile_Config</h4>
+                
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Nama Lengkap</label>
+                    <input type="text" id="cust-name" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="Nama Anda">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Peran TKJ (Pisahkan dengan koma)</label>
+                    <input type="text" id="cust-roles" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="Network Engineer, Mikrotik Specialist, Server Admin">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Bio / Ringkasan Diri</label>
+                    <textarea id="cust-bio" rows="3" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="Deskripsi ringkas..."></textarea>
+                </div>
+
+                <!-- Foto Profil Input -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Foto Profil (URL Gambar)</label>
+                    <input type="text" id="cust-photo-url" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary mb-2" placeholder="https://example.com/photo.jpg">
+                    
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Atau Upload Gambar Lokal</label>
+                    <input type="file" id="cust-photo-file" accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-slate-950 hover:file:opacity-90 cursor-pointer">
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- Kontak & Lokasi -->
+            <div class="space-y-4">
+                <h4 class="font-semibold text-sm text-primary uppercase tracking-wider font-mono">&gt; Network_Info</h4>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Email</label>
+                    <input type="email" id="cust-email" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="andika@tkj.net">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Nomor Telepon / WA</label>
+                    <input type="text" id="cust-phone" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="+62 812 3456 7890">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Lokasi</label>
+                    <input type="text" id="cust-location" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="Bandung, Indonesia">
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- Social Media -->
+            <div class="space-y-4">
+                <h4 class="font-semibold text-sm text-primary uppercase tracking-wider font-mono">&gt; Social_Endpoints</h4>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">GitHub / Gitlab URL</label>
+                    <input type="text" id="cust-github" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="https://github.com/username">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">LinkedIn URL</label>
+                    <input type="text" id="cust-linkedin" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="https://linkedin.com/in/username">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Instagram URL</label>
+                    <input type="text" id="cust-instagram" class="w-full px-3 py-2 text-sm rounded-lg border border-slate-700 bg-slate-800 text-slate-100 focus:outline-none focus:border-primary" placeholder="https://instagram.com/username">
+                </div>
+            </div>
+
+            <hr class="border-slate-800">
+
+            <!-- Tombol Aksi Customizer -->
+            <div class="space-y-2 pt-2">
+                <button onclick="saveAndApplyCustomizations()" class="w-full py-2.5 bg-primary hover:bg-primary-hover text-slate-950 font-bold text-sm rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Konfigurasi
+                </button>
+                <button onclick="resetToDefault()" class="w-full py-2 bg-slate-800 hover:bg-red-500 hover:text-white text-slate-300 text-xs rounded-lg transition duration-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i> Reset Ke Default
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 w-full z-40 glass border-b border-slate-800 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo / Brand -->
+            <a href="#hero" class="text-xl font-bold tracking-tight flex items-center gap-2 font-mono">
+                <span class="w-9 h-9 rounded-lg bg-primary text-slate-950 flex items-center justify-center shadow-md text-lg font-black" id="nav-logo-initial">A</span>
+                <span id="nav-brand-name" class="gradient-text font-extrabold">Andika.sys</span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#about" class="hover:text-primary transition-colors">&gt; Tentang</a>
+                <a href="#skills" class="hover:text-primary transition-colors">&gt; Keahlian TKJ</a>
+                <a href="#projects" class="hover:text-primary transition-colors">&gt; Lab & Proyek</a>
+                <a href="#certifications" class="hover:text-primary transition-colors">&gt; Sertifikasi</a>
+                <a href="#contact" class="hover:text-primary transition-colors">&gt; Kontak</a>
+            </nav>
+
+            <!-- Actions Right -->
+            <div class="flex items-center gap-3">
+                <a href="#contact" class="hidden sm:inline-flex items-center gap-2 bg-primary text-slate-950 px-4 py-2 rounded-lg text-sm font-bold hover:bg-primary-hover shadow-lg hover:shadow-cyan-500/20 transition-all duration-200">
+                    <i class="fa-solid fa-network-wired"></i> Connect Now
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-300 hover:bg-slate-800">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-800 bg-slate-900/95 backdrop-blur-lg">
+            <div class="px-4 pt-2 pb-6 space-y-3 text-sm font-medium font-mono">
+                <a href="#about" class="block py-2 hover:text-primary border-b border-slate-800">&gt; Tentang</a>
+                <a href="#skills" class="block py-2 hover:text-primary border-b border-slate-800">&gt; Keahlian TKJ</a>
+                <a href="#projects" class="block py-2 hover:text-primary border-b border-slate-800">&gt; Lab & Proyek</a>
+                <a href="#certifications" class="block py-2 hover:text-primary border-b border-slate-800">&gt; Sertifikasi</a>
+                <a href="#contact" class="block py-2 hover:text-primary">&gt; Kontak</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="pt-20">
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="min-h-[calc(100vh-5rem)] flex items-center justify-center relative py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <!-- Background Glow Decor -->
+            <div class="absolute -top-32 -left-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-12 items-center relative z-10">
+                <!-- Hero Left: Text & CTA -->
+                <div class="md:col-span-7 text-center md:text-left space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-mono font-semibold tracking-wide border border-primary/30">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        SYSTEM STATUS: ONLINE / READY FOR NETWORKING
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                        Halo, Saya <br><span id="display-name" class="gradient-text">Andika</span>
+                    </h1>
+
+                    <div class="text-lg sm:text-2xl font-mono text-slate-300 min-h-[40px] flex items-center justify-center md:justify-start">
+                        <span class="text-slate-500">$ role&nbsp;</span>
+                        <span id="typing-text" class="text-primary font-bold typing-cursor">Network Engineer</span>
+                    </div>
+
+                    <p id="display-bio" class="text-base text-slate-400 max-w-2xl leading-relaxed">
+                        Siswa / Lulusan Teknik Komputer dan Jaringan (TKJ) yang berfokus pada perancangan infrastruktur jaringan, konfigurasi Router & Switch, manajemen Server Linux/Windows, serta implementasi keamanan jaringan.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-wrap gap-4 justify-center md:justify-start pt-2 font-mono text-sm">
+                        <a href="#projects" class="px-6 py-3 bg-primary text-slate-950 font-bold rounded-xl shadow-lg hover:bg-primary-hover hover:shadow-cyan-500/20 hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
+                            <i class="fa-solid fa-diagram-project"></i> Lihat Lab & Proyek
+                        </a>
+                        <a href="#contact" class="px-6 py-3 bg-slate-900 border border-slate-700 font-medium rounded-xl hover:bg-slate-800 transition-all duration-200 flex items-center gap-2 text-slate-200">
+                            <i class="fa-solid fa-terminal"></i> Kontak SAYA
+                        </a>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="pt-4 flex items-center justify-center md:justify-start gap-4">
+                        <span class="text-xs font-mono font-semibold uppercase tracking-wider text-slate-500">Links:</span>
+                        <div class="flex gap-3">
+                            <a id="link-github" href="#" target="_blank" class="w-10 h-10 rounded-lg glass flex items-center justify-center text-slate-300 hover:text-primary hover:border-primary transition-all duration-200"><i class="fa-brands fa-github text-lg"></i></a>
+                            <a id="link-linkedin" href="#" target="_blank" class="w-10 h-10 rounded-lg glass flex items-center justify-center text-slate-300 hover:text-primary hover:border-primary transition-all duration-200"><i class="fa-brands fa-linkedin-in text-lg"></i></a>
+                            <a id="link-instagram" href="#" target="_blank" class="w-10 h-10 rounded-lg glass flex items-center justify-center text-slate-300 hover:text-primary hover:border-primary transition-all duration-200"><i class="fa-brands fa-instagram text-lg"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Right: Avatar Image -->
+                <div class="md:col-span-5 flex justify-center">
+                    <div class="relative w-64 h-64 sm:w-80 sm:h-80 group">
+                        <!-- Neon Glow Outline -->
+                        <div class="absolute -inset-1.5 bg-gradient-to-r from-primary to-blue-600 rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+                        
+                        <!-- Image Container -->
+                        <div class="relative w-full h-full rounded-3xl overflow-hidden bg-slate-900 shadow-2xl border-2 border-slate-700">
+                            <img id="display-profile-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800" alt="Foto Profil Andika TKJ" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/400x400/06b6d4/0f172a?text=Foto+Andika+TKJ'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT ME SECTION -->
+        <section id="about" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-primary font-mono font-bold mb-2">&gt; ABOUT_ME</h2>
+                    <p class="text-3xl font-extrabold sm:text-4xl">Profil & Passion di Dunia TKJ</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- Text Description -->
+                    <div class="lg:col-span-7 space-y-4 text-slate-300 leading-relaxed">
+                        <p>
+                            Saya adalah siswa/lulusan jurusan **Teknik Komputer dan Jaringan (TKJ)** yang memiliki ketertarikan mendalam pada teknologi jaringan komputer, pengelolaan server, administrasi sistem, dan keamanan siber.
+                        </p>
+                        <p>
+                            Terbiasa bekerja dengan perangkat fisik (Routerboard Mikrotik, Cisco Switch, Access Point, Patch Panel, Fiber Optic) maupun simulasi virtual (Cisco Packet Tracer, GNS3, VMware/VirtualBox).
+                        </p>
+                        
+                        <!-- Mini Info List -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 text-sm font-mono">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-location-dot text-primary text-lg w-5"></i>
+                                <span class="text-slate-400">Lokasi:</span>
+                                <span id="display-location" class="text-slate-100 font-semibold">Bandung, Indonesia</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-envelope text-primary text-lg w-5"></i>
+                                <span class="text-slate-400">Email:</span>
+                                <span id="display-email-about" class="text-slate-100 font-semibold truncate">andika@tkj.net</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-phone text-primary text-lg w-5"></i>
+                                <span class="text-slate-400">Kontak:</span>
+                                <span id="display-phone-about" class="text-slate-100 font-semibold">+62 812 3456 7890</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-server text-primary text-lg w-5"></i>
+                                <span class="text-slate-400">Status:</span>
+                                <span class="text-emerald-400 font-semibold">Ready for PKL / Work</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Counter / Stats Grid -->
+                    <div class="lg:col-span-5 grid grid-cols-2 gap-4 font-mono">
+                        <div class="glass p-6 rounded-2xl text-center space-y-2 hover:-translate-y-1 transition duration-200 border-primary/20">
+                            <h3 class="text-3xl font-extrabold text-primary">50+</h3>
+                            <p class="text-xs font-semibold uppercase text-slate-400">Router & Switch Configured</p>
+                        </div>
+                        <div class="glass p-6 rounded-2xl text-center space-y-2 hover:-translate-y-1 transition duration-200 border-primary/20">
+                            <h3 class="text-3xl font-extrabold text-primary">15+</h3>
+                            <p class="text-xs font-semibold uppercase text-slate-400">Network Labs Completed</p>
+                        </div>
+                        <div class="glass p-6 rounded-2xl text-center space-y-2 hover:-translate-y-1 transition duration-200 border-primary/20">
+                            <h3 class="text-3xl font-extrabold text-primary">5+</h3>
+                            <p class="text-xs font-semibold uppercase text-slate-400">Server Deployments</p>
+                        </div>
+                        <div class="glass p-6 rounded-2xl text-center space-y-2 hover:-translate-y-1 transition duration-200 border-primary/20">
+                            <h3 class="text-3xl font-extrabold text-primary">99.9%</h3>
+                            <p class="text-xs font-semibold uppercase text-slate-400">Target Uptime</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills" class="py-20 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-primary font-mono font-bold mb-2">&gt; SKILL_MATRIX</h2>
+                    <p class="text-3xl font-extrabold sm:text-4xl">Keahlian Utama TKJ</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Networking Skills -->
+                    <div class="glass p-8 rounded-2xl space-y-6">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-lg"><i class="fa-solid fa-network-wired"></i></div>
+                            <h3 class="text-xl font-bold font-mono">Networking & Hardware</h3>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Mikrotik RouterOS (Routing, Bandwidth, Hotspot)</span>
+                                    <span class="text-primary font-mono font-semibold">90%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 90%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Cisco IOS (VLAN, Trunking, OSPF, ACL)</span>
+                                    <span class="text-primary font-mono font-semibold">85%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 85%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Subnetting (VLSM/CIDR) & IP Addressing</span>
+                                    <span class="text-primary font-mono font-semibold">95%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 95%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Fiber Optic (Splicing, OPM, OTDR) & LAN Cable</span>
+                                    <span class="text-primary font-mono font-semibold">80%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 80%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Server & System Admin Skills -->
+                    <div class="glass p-8 rounded-2xl space-y-6">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-10 h-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-lg"><i class="fa-solid fa-server"></i></div>
+                            <h3 class="text-xl font-bold font-mono">Server Administration & Security</h3>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Linux Server (Debian/Ubuntu: DNS, Web, Mail, FTP)</span>
+                                    <span class="text-primary font-mono font-semibold">85%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 85%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Windows Server (Active Directory, DHCP, DNS)</span>
+                                    <span class="text-primary font-mono font-semibold">75%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 75%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Virtualization (Proxmox, VMware, VirtualBox)</span>
+                                    <span class="text-primary font-mono font-semibold">80%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 80%;"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between text-sm font-medium mb-1">
+                                    <span>Firewall & Traffic Analysis (Wireshark, IPTables)</span>
+                                    <span class="text-primary font-mono font-semibold">75%</span>
+                                </div>
+                                <div class="w-full bg-slate-800 h-2.5 rounded-full overflow-hidden">
+                                    <div class="bg-primary h-full rounded-full transition-all duration-1000" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <h2 class="text-xs uppercase tracking-widest text-primary font-mono font-bold mb-2">&gt; LAB_PROJECTS</h2>
+                    <p class="text-3xl font-extrabold sm:text-4xl">Proyek & Lab Jaringan</p>
+                </div>
+
+                <!-- Category Filters -->
+                <div class="flex justify-center items-center gap-2 flex-wrap mb-10 font-mono text-xs">
+                    <button onclick="filterProjects('all')" class="project-filter-btn px-4 py-2 rounded-lg font-bold bg-primary text-slate-950 shadow-sm transition" data-filter="all">ALL_LABS</button>
+                    <button onclick="filterProjects('mikrotik')" class="project-filter-btn px-4 py-2 rounded-lg font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-filter="mikrotik">MIKROTIK</button>
+                    <button onclick="filterProjects('cisco')" class="project-filter-btn px-4 py-2 rounded-lg font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-filter="cisco">CISCO</button>
+                    <button onclick="filterProjects('server')" class="project-filter-btn px-4 py-2 rounded-lg font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 transition" data-filter="server">SERVER_LINUX</button>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="projects-grid">
+                    <!-- Project Card 1 -->
+                    <div class="project-card glass rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300 shadow-md flex flex-col justify-between border-slate-800" data-category="mikrotik">
+                        <div>
+                            <div class="h-48 overflow-hidden relative group bg-slate-950 flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=600" alt="Mikrotik Lab" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80" onerror="this.src='https://placehold.co/600x400/06b6d4/0f172a?text=Mikrotik+Hotspot'">
+                                <div class="absolute top-3 left-3 bg-slate-950/80 px-2.5 py-1 rounded text-xs font-mono text-primary border border-primary/30">
+                                    <i class="fa-solid fa-wifi"></i> RouterOS
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-primary uppercase tracking-wider font-mono">Mikrotik Config</span>
+                                <h3 class="text-xl font-bold mt-1 mb-2">Setup Hotspot & Bandwidth Limiter</h3>
+                                <p class="text-slate-400 text-sm line-clamp-3">Konfigurasi Routerboard Mikrotik untuk manajemen hotspot sekolah, login page kustom, queue tree bandwidth management, dan isolasi jaringan VLAN.</p>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 pt-0 flex gap-2 flex-wrap font-mono">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Mikrotik</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Winbox</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">UserMan</span>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 2 -->
+                    <div class="project-card glass rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300 shadow-md flex flex-col justify-between border-slate-800" data-category="cisco">
+                        <div>
+                            <div class="h-48 overflow-hidden relative group bg-slate-950 flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=600" alt="Cisco Lab" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80" onerror="this.src='https://placehold.co/600x400/06b6d4/0f172a?text=Cisco+Topology'">
+                                <div class="absolute top-3 left-3 bg-slate-950/80 px-2.5 py-1 rounded text-xs font-mono text-primary border border-primary/30">
+                                    <i class="fa-solid fa-sitemap"></i> Packet Tracer
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-primary uppercase tracking-wider font-mono">Cisco Topology</span>
+                                <h3 class="text-xl font-bold mt-1 mb-2">Simulasi Inter-VLAN Routing & OSPF</h3>
+                                <p class="text-slate-400 text-sm line-clamp-3">Perancangan topologi jaringan skala menengah menggunakan Cisco Switch Catalyst dan Router. Konfigurasi VTP, Trunking, Inter-VLAN Routing, dan OSPF dynamic routing.</p>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 pt-0 flex gap-2 flex-wrap font-mono">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Cisco CLI</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Packet Tracer</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">OSPF</span>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 3 -->
+                    <div class="project-card glass rounded-2xl overflow-hidden hover:-translate-y-2 transition-all duration-300 shadow-md flex flex-col justify-between border-slate-800" data-category="server">
+                        <div>
+                            <div class="h-48 overflow-hidden relative group bg-slate-950 flex items-center justify-center p-4">
+                                <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?auto=format&fit=crop&q=80&w=600" alt="Linux Server" class="w-full h-full object-cover group-hover:scale-110 transition duration-500 opacity-80" onerror="this.src='https://placehold.co/600x400/06b6d4/0f172a?text=Debian+Server'">
+                                <div class="absolute top-3 left-3 bg-slate-950/80 px-2.5 py-1 rounded text-xs font-mono text-primary border border-primary/30">
+                                    <i class="fa-brands fa-linux"></i> Linux OS
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <span class="text-xs font-semibold text-primary uppercase tracking-wider font-mono">Server Admin</span>
+                                <h3 class="text-xl font-bold mt-1 mb-2">Build Server Debian All-in-One</h3>
+                                <p class="text-slate-400 text-sm line-clamp-3">Instalasi dan konfigurasi Server Debian 11/12 meliputi layanan Bind9 DNS Server, Apache2 Web Server, Postfix Mail Server, serta SAMBA file sharing.</p>
+                            </div>
+                        </div>
+                        <div class="px-6 pb-6 pt-0 flex gap-2 flex-wrap font-mono">
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Debian</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">Apache</span>
+                            <span class="px-2.5 py-1 rounded-md text-xs font-medium bg-slate-800 text-slate-300 border border-slate-700">DNS/Bind9</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CERTIFICATIONS SECTION -->
+        <section id="certifications" class="py-20 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-primary font-mono font-bold mb-2">&gt; CREDENTIALS</h2>
+                    <p class="text-3xl font-extrabold sm:text-4xl">Sertifikasi & Pelatihan</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Cert 1 -->
+                    <div class="glass p-6 rounded-2xl flex gap-4 items-start border-l-4 border-l-primary">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl shrink-0 font-bold font-mono">
+                            <i class="fa-solid fa-certificate"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-xs font-mono text-primary font-semibold">MikroTik Certified</span>
+                            <h3 class="text-lg font-bold">MTCNA (MikroTik Certified Network Associate)</h3>
+                            <p class="text-xs text-slate-400">MikroTik Training Center • Validating Network Fundamentals & RouterOS</p>
+                        </div>
+                    </div>
+
+                    <!-- Cert 2 -->
+                    <div class="glass p-6 rounded-2xl flex gap-4 items-start border-l-4 border-l-primary">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-2xl shrink-0 font-bold font-mono">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-xs font-mono text-primary font-semibold">Cisco Networking Academy</span>
+                            <h3 class="text-lg font-bold">CCNA: Introduction to Networks</h3>
+                            <p class="text-xs text-slate-400">Cisco Networking Academy • Switching, Routing, and Wireless Essentials</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-16">
+                    <h2 class="text-xs uppercase tracking-widest text-primary font-mono font-bold mb-2">&gt; ESTABLISH_CONNECTION</h2>
+                    <p class="text-3xl font-extrabold sm:text-4xl">Kontak & Diskusi Proyek</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    <!-- Contact Cards -->
+                    <div class="lg:col-span-5 space-y-4">
+                        <div class="glass p-6 rounded-2xl flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-envelope"></i></div>
+                            <div>
+                                <h4 class="text-xs uppercase font-mono font-semibold text-slate-400">Email Destination</h4>
+                                <p id="display-email-contact" class="font-bold text-slate-100">andika@tkj.net</p>
+                            </div>
+                        </div>
+
+                        <div class="glass p-6 rounded-2xl flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-phone"></i></div>
+                            <div>
+                                <h4 class="text-xs uppercase font-mono font-semibold text-slate-400">Phone / WhatsApp</h4>
+                                <p id="display-phone-contact" class="font-bold text-slate-100">+62 812 3456 7890</p>
+                            </div>
+                        </div>
+
+                        <div class="glass p-6 rounded-2xl flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center text-xl shrink-0"><i class="fa-solid fa-location-dot"></i></div>
+                            <div>
+                                <h4 class="text-xs uppercase font-mono font-semibold text-slate-400">Node Location</h4>
+                                <p id="display-location-contact" class="font-bold text-slate-100">Bandung, Indonesia</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="lg:col-span-7 glass p-8 rounded-2xl shadow-lg border border-slate-800">
+                        <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-mono font-semibold text-slate-300 mb-1">Nama Pengirim</label>
+                                    <input type="text" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:outline-none focus:border-primary text-sm text-slate-100" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono font-semibold text-slate-300 mb-1">Email Pengirim</label>
+                                    <input type="email" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:outline-none focus:border-primary text-sm text-slate-100" placeholder="john@domain.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono font-semibold text-slate-300 mb-1">Subjek Pesan</label>
+                                <input type="text" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:outline-none focus:border-primary text-sm text-slate-100" placeholder="Penawaran Kerja / Proyek Jaringan">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono font-semibold text-slate-300 mb-1">Pesan / Detail Lab</label>
+                                <textarea rows="4" required class="w-full px-4 py-3 rounded-xl border border-slate-700 bg-slate-900 focus:outline-none focus:border-primary text-sm text-slate-100" placeholder="Tuliskan pesan Anda..."></textarea>
+                            </div>
+                            <button type="submit" class="w-full py-3.5 bg-primary hover:bg-primary-hover text-slate-950 font-bold font-mono rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-solid fa-paper-plane"></i> SEND_MESSAGE
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-800 py-8 px-4 text-center text-sm text-slate-500 font-mono">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p>&copy; <span id="current-year"></span> <span id="footer-name">Andika</span> [TKJ Portfolio]. All System Operational.</p>
+            <div class="flex gap-6">
+                <a href="#hero" class="hover:text-primary transition">Top</a>
+                <a href="#about" class="hover:text-primary transition">About</a>
+                <a href="#projects" class="hover:text-primary transition">Labs</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- NOTIFICATION TOAST -->
+    <div id="toast-message" class="fixed bottom-20 right-6 z-50 bg-slate-100 text-slate-900 px-5 py-3 rounded-xl shadow-2xl transform translate-y-32 opacity-0 transition-all duration-300 flex items-center gap-3 text-sm font-bold font-mono">
+        <i class="fa-solid fa-terminal text-primary text-lg"></i>
+        <span id="toast-text">Konfigurasi berhasil disimpan!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // --- DATA DEFAULT KHUSUS ANDIKA (TKJ) ---
+        const defaultData = {
+            theme: 'dark',
+            primaryColor: '#06b6d4',
+            name: 'Andika',
+            roles: ['Network Engineer', 'Mikrotik & Cisco Specialist', 'Server Administrator', 'TKJ Specialist'],
+            bio: 'Siswa / Lulusan Teknik Komputer dan Jaringan (TKJ) yang berfokus pada perancangan infrastruktur jaringan, konfigurasi Router & Switch, manajemen Server Linux/Windows, serta implementasi keamanan jaringan.',
+            photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800',
+            email: 'andika@tkj.net',
+            phone: '+62 812 3456 7890',
+            location: 'Bandung, Indonesia',
+            github: 'https://github.com',
+            linkedin: 'https://linkedin.com',
+            instagram: 'https://instagram.com'
+        };
+
+        // Current App State
+        let profileData = { ...defaultData };
+
+        // --- DOM Elements ---
+        const customizerPanel = document.getElementById('customizer-panel');
+        const openCustomizerBtn = document.getElementById('open-customizer');
+        const closeCustomizerBtn = document.getElementById('close-customizer');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        // --- Typing Animation State ---
+        let typingIndex = 0;
+        let roleIndex = 0;
+        let isDeleting = false;
+        let typingTimeout;
+
+        // --- INITIALIZATION ---
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedData();
+            setupEventListeners();
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+        });
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            openCustomizerBtn.addEventListener('click', () => {
+                customizerPanel.classList.remove('translate-x-full');
+            });
+
+            closeCustomizerBtn.addEventListener('click', () => {
+                customizerPanel.classList.add('translate-x-full');
+            });
+
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Handle Local Image File Upload
+            document.getElementById('cust-photo-file').addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (evt) {
+                        document.getElementById('cust-photo-url').value = evt.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        // Load data from LocalStorage
+        function loadSavedData() {
+            const saved = localStorage.getItem('andika_tkj_portfolio_data');
+            if (saved) {
+                try {
+                    profileData = JSON.parse(saved);
+                } catch (e) {
+                    console.error("Gagal memuat data dari LocalStorage", e);
+                }
+            }
+            populateCustomizerInputs();
+            applyProfileData();
+        }
+
+        // Fill customizer panel inputs with current state
+        function populateCustomizerInputs() {
+            document.getElementById('input-primary-color').value = profileData.primaryColor;
+            document.getElementById('color-hex-code').textContent = profileData.primaryColor;
+            document.getElementById('cust-name').value = profileData.name;
+            document.getElementById('cust-roles').value = Array.isArray(profileData.roles) ? profileData.roles.join(', ') : profileData.roles;
+            document.getElementById('cust-bio').value = profileData.bio;
+            document.getElementById('cust-photo-url').value = profileData.photoUrl;
+            document.getElementById('cust-email').value = profileData.email;
+            document.getElementById('cust-phone').value = profileData.phone;
+            document.getElementById('cust-location').value = profileData.location;
+            document.getElementById('cust-github').value = profileData.github;
+            document.getElementById('cust-linkedin').value = profileData.linkedin;
+            document.getElementById('cust-instagram').value = profileData.instagram;
+        }
+
+        // Apply state data to UI elements
+        function applyProfileData() {
+            // Theme Mode
+            setTheme(profileData.theme || 'dark', false);
+
+            // Primary Color
+            updatePrimaryColor(profileData.primaryColor || '#06b6d4', false);
+
+            // Text elements
+            document.getElementById('display-name').textContent = profileData.name;
+            document.getElementById('nav-brand-name').textContent = profileData.name + '.sys';
+            document.getElementById('footer-name').textContent = profileData.name;
+            document.getElementById('nav-logo-initial').textContent = profileData.name ? profileData.name.charAt(0).toUpperCase() : 'A';
+            document.getElementById('display-bio').textContent = profileData.bio;
+            
+            // Contacts
+            document.getElementById('display-location').textContent = profileData.location;
+            document.getElementById('display-email-about').textContent = profileData.email;
+            document.getElementById('display-phone-about').textContent = profileData.phone;
+            document.getElementById('display-email-contact').textContent = profileData.email;
+            document.getElementById('display-phone-contact').textContent = profileData.phone;
+            document.getElementById('display-location-contact').textContent = profileData.location;
+
+            // Profile Photo
+            if (profileData.photoUrl) {
+                document.getElementById('display-profile-img').src = profileData.photoUrl;
+            }
+
+            // Social Media Links
+            document.getElementById('link-github').href = profileData.github || '#';
+            document.getElementById('link-linkedin').href = profileData.linkedin || '#';
+            document.getElementById('link-instagram').href = profileData.instagram || '#';
+
+            // Restart Typing Animation with updated roles
+            startTypingEffect();
+        }
+
+        // Save Customization
+        function saveAndApplyCustomizations() {
+            const rolesInput = document.getElementById('cust-roles').value;
+            const rolesArray = rolesInput.split(',').map(r => r.trim()).filter(r => r.length > 0);
+
+            profileData.name = document.getElementById('cust-name').value || defaultData.name;
+            profileData.roles = rolesArray.length > 0 ? rolesArray : defaultData.roles;
+            profileData.bio = document.getElementById('cust-bio').value || defaultData.bio;
+            profileData.photoUrl = document.getElementById('cust-photo-url').value || defaultData.photoUrl;
+            profileData.email = document.getElementById('cust-email').value || defaultData.email;
+            profileData.phone = document.getElementById('cust-phone').value || defaultData.phone;
+            profileData.location = document.getElementById('cust-location').value || defaultData.location;
+            profileData.github = document.getElementById('cust-github').value || defaultData.github;
+            profileData.linkedin = document.getElementById('cust-linkedin').value || defaultData.linkedin;
+            profileData.instagram = document.getElementById('cust-instagram').value || defaultData.instagram;
+
+            // Save to LocalStorage
+            localStorage.setItem('andika_tkj_portfolio_data', JSON.stringify(profileData));
+
+            applyProfileData();
+            showToast('Konfigurasi berhasil diperbarui!');
+            customizerPanel.classList.add('translate-x-full');
+        }
+
+        // Reset to default
+        function resetToDefault() {
+            if (confirm('Apakah Anda yakin ingin mengembalikan semua data ke konfigurasi awal Andika TKJ?')) {
+                localStorage.removeItem('andika_tkj_portfolio_data');
+                profileData = JSON.parse(JSON.stringify(defaultData));
+                populateCustomizerInputs();
+                applyProfileData();
+                showToast('Konfigurasi direset ke default.');
+                customizerPanel.classList.add('translate-x-full');
+            }
+        }
+
+        // Theme Toggle (Light/Dark)
+        function setTheme(mode, shouldSave = true) {
+            profileData.theme = mode;
+            const html = document.documentElement;
+            const lightBtn = document.getElementById('btn-theme-light');
+            const darkBtn = document.getElementById('btn-theme-dark');
+
+            if (mode === 'dark') {
+                html.classList.add('dark');
+                html.classList.remove('light');
+                darkBtn?.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+                lightBtn?.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                lightBtn?.classList.add('border-primary', 'bg-primary/10', 'text-primary');
+                darkBtn?.classList.remove('border-primary', 'bg-primary/10', 'text-primary');
+            }
+
+            if (shouldSave) {
+                localStorage.setItem('andika_tkj_portfolio_data', JSON.stringify(profileData));
+            }
+        }
+
+        // Primary Color Update
+        function updatePrimaryColor(hex, shouldSave = true) {
+            profileData.primaryColor = hex;
+            document.documentElement.style.setProperty('--color-primary', hex);
+            
+            // Generate darker shade for hover state
+            const hoverHex = adjustColorBrightness(hex, -20);
+            document.documentElement.style.setProperty('--color-primary-hover', hoverHex);
+
+            document.getElementById('color-hex-code').textContent = hex;
+
+            if (shouldSave) {
+                localStorage.setItem('andika_tkj_portfolio_data', JSON.stringify(profileData));
+            }
+        }
+
+        // Helper to adjust color brightness
+        function adjustColorBrightness(hex, percent) {
+            let num = parseInt(hex.replace('#', ''), 16),
+                amt = Math.round(2.55 * percent),
+                R = (num >> 16) + amt,
+                G = (num >> 8 & 0x00FF) + amt,
+                B = (num & 0x0000FF) + amt;
+            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 + (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 + (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        // Typing Effect Logic
+        function startTypingEffect() {
+            clearTimeout(typingTimeout);
+            const roles = profileData.roles && profileData.roles.length > 0 ? profileData.roles : defaultData.roles;
+            const typingTextElement = document.getElementById('typing-text');
+            
+            function type() {
+                const currentRole = roles[roleIndex % roles.length];
+                
+                if (isDeleting) {
+                    typingTextElement.textContent = currentRole.substring(0, typingIndex - 1);
+                    typingIndex--;
+                } else {
+                    typingTextElement.textContent = currentRole.substring(0, typingIndex + 1);
+                    typingIndex++;
+                }
+
+                let speed = isDeleting ? 40 : 80;
+
+                if (!isDeleting && typingIndex === currentRole.length) {
+                    speed = 2200; // Pause at end of word
+                    isDeleting = true;
+                } else if (isDeleting && typingIndex === 0) {
+                    isDeleting = false;
+                    roleIndex++;
+                    speed = 400;
+                }
+
+                typingTimeout = setTimeout(type, speed);
+            }
+
+            typingIndex = 0;
+            isDeleting = false;
+            type();
+        }
+
+        // Filter Projects Category
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.project-filter-btn');
+
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.classList.remove('bg-slate-800', 'text-slate-300');
+                    btn.classList.add('bg-primary', 'text-slate-950');
+                } else {
+                    btn.classList.add('bg-slate-800', 'text-slate-300');
+                    btn.classList.remove('bg-primary', 'text-slate-950');
+                }
+            });
+
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Contact Form Submission Handler
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showToast('Pesan berhasil terkirim ke server Andika!');
+            e.target.reset();
+        }
+
+        // Toast Notification Helper
+        function showToast(message) {
+            const toast = document.getElementById('toast-message');
+            const toastText = document.getElementById('toast-text');
+            toastText.textContent = message;
+
+            toast.classList.remove('translate-y-32', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-32', 'opacity-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
